@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>Sideburns</title>
+</head>
+<body>
+    <div class="container">
+        
+    </div>
+
+    <!-- Scripts -->
+    <script type="text/javascript" src="jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="handlebars-1.0.rc.1.js"></script>
+    <script type="text/javascript" src="sideburns.js"></script>
+    <script type="text/javascript">
+        var headerSb = new Template({
+            path:       "header.sb",
+            selector:   ".container",
+            run:        "render",
+            context:    {
+                title:      "Sideburns", 
+                subtitle:   ".js", 
+                tagline:    "Makes a mustache even better."
+            }
+        },function(){
+            var articleSb = new Template({
+                path: "article.sb",
+                selector: ".container",
+                run: "append",
+                context: {
+                    url: "#",
+                    title: "Title!",
+                    source: "NYTimes",
+                    summary: "This shit is the greatest."
+                }
+            });
+        });
+
+    </script>
+
+</body>
+</html>

@@ -10,38 +10,42 @@
     //  @path :     The path to your template. Should be a string, but you know. It's javascript. Go nuts. 
     //  @context:   If defined, gives template some context.
     //  @selector:  If defined, gives template a selector. If present with @path and @context, do an asynch render.
-    //  @append:    If true, appends the template to the selector rather than replacing its content.
+    //  @run:       If "append," immediately append. If "render," immediately render.  
     //  @callback:  Optional call back function. Useful if you make an asynch render. 
 
     function Template(args, callback){
         var current = this;
-        if(args.context != null) this.context = context;
-        if(args.selector != null) this.selector = selector;
+        if(args.context != null){
+            this.context = args.context; 
+        } 
+        if(args.selector != null){
+            this.selector = args.selector;
+        }
         if(typeof args.path === "string"){
-            if(context != null && selector != null){
-                current.context = context;
-                current.selector = selector;
-                current.initAsync(path, function(temp){
-                    if(args.append) 
-                        temp.append(context, selector);
-                    else    
-                        temp.render(context, selector);
+            if(args.context != null && args.selector != null){
+                current.context = args.context;
+                current.selector = args.selector;
+                current.initAsync(args.path, function(temp){
+                    if(args.run != null){
+                        if(args.run === "append") 
+                            temp.append(args.context, args.selector);
+                        else if (args.run === "render")   
+                            temp.render(args.context, args.selector);
+                        else 
+                            console.error("Sideburns doesn't know how to run '" + args.run + ".'");    
+                    }
+                    
                     if(typeof callback === "function") 
                         callback(this);
                 });
             }
             else{
-                current.init(path);
+                current.init(args.path);
                 if(typeof callback === "function")
                     callback(this);
             }
         }
     };
-
-    function Template(path, callback){
-        console.log(path);
-        console.log(callback);
-    }
 
         Template.prototype.source   = "";
         Template.prototype.template = null;
@@ -56,6 +60,8 @@
                 cache: false,
                 async: false,
                 success: function(data){
+                    console.log("Successfully loaded template from " + path);
+                    console.log("Template populated with:\n " + data)
                     current.source = data;
                     current.template = Handlebars.compile(current.source);
                 }

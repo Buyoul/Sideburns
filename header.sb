@@ -1,0 +1,6 @@
+<!-- header.sb -->
+
+<div class="sideburnsHeader">
+    <h1>{{title}}<small>{{subtitle}}</small></h1>
+    <h3>{{tagline}}</h3>
+</div>
